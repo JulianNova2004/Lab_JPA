@@ -12,14 +12,21 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.NotAuthorizedException;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
+
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 
 /**
@@ -61,6 +68,43 @@ public class CompetitorService {
     }
 
     @POST
+    @Path("/login")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response logIn(CompetitorDTO competitor) throws JSONException {
+
+        //JSONObject rta = new JSONObject();
+        //Competitor competitorTmp = new Competitor();
+
+        try {
+            Competitor competitorTmp = (Competitor) entityManager.createQuery("SELECT c FROM Competitor c WHERE c.address = :address AND c.password = :password")
+                    .setParameter("address", competitor.getAddress())
+                    .setParameter("password", competitor.getPassword())
+                    .getSingleResult();
+
+            //if (competitorTmp != null) {
+            
+            return Response.ok(competitor).build();
+            
+            //}
+            
+        } catch (NoResultException e) {
+            
+            throw new NotAuthorizedException("Las credenciales ingresadas son incorrectas");
+        
+        } catch (Exception e) {
+            
+            Response response = Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                                .entity("Error interno en el servidor: " + e.getMessage())
+                                .build();
+            throw new WebApplicationException(response);
+            
+        }
+
+        //return Response.status(Response.Status.UNAUTHORIZED).entity("No autorizado").build();
+    }
+
+    @POST
     @Path("/add")
     @Produces(MediaType.APPLICATION_JSON)
     public Response createCompetitor(CompetitorDTO competitor) {
@@ -68,6 +112,7 @@ public class CompetitorService {
         JSONObject rta = new JSONObject();
         Competitor competitorTmp = new Competitor();
         competitorTmp.setAddress(competitor.getAddress());
+        competitorTmp.setPassword(competitor.getPassword());
         competitorTmp.setAge(competitor.getAge());
         competitorTmp.setCellphone(competitor.getCellphone());
         competitorTmp.setCity(competitor.getCity());

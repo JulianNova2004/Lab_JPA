@@ -56,6 +56,10 @@ public class Competitor implements Serializable {
 
     private String address;
 
+    //private String email;
+    
+    private String password;
+    
     private String city;
 
     private String country;
@@ -93,7 +97,7 @@ public class Competitor implements Serializable {
         this.updatedAt = updatedAt;
     }
 
-    public Competitor(String nameN, String surnameN, int ageN, String telephoneN, String cellphoneN, String addressN, String cityN, String countryN, boolean winnerN) {
+    public Competitor(String nameN, String surnameN, int ageN, String telephoneN, String cellphoneN, String addressN, String cityN, String countryN, boolean winnerN, String passwordN) {
         name = nameN;
         surname = surnameN;
         age = ageN;
@@ -103,6 +107,7 @@ public class Competitor implements Serializable {
         city = cityN;
         country = countryN;
         winner = winnerN;
+        password = passwordN;
     }
 
     @PreUpdate
@@ -190,4 +195,22 @@ public class Competitor implements Serializable {
     public Set<Producto> getProducts() {
         return products;
     }
+
+//    public String getEmail() {
+//        return email;
+//    }
+//
+//    public void setEmail(String email) {
+//        this.email = email;
+//    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+    
+    
 }

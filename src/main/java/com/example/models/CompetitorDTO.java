@@ -16,6 +16,8 @@ public class CompetitorDTO {
     
     private String surname;
     
+    private String password;
+    
     private int age;
     
     private String telephone;
@@ -96,5 +98,15 @@ public class CompetitorDTO {
     public void setCountry(String country) {
         this.country = country;
     }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+    
+    
     
 }
