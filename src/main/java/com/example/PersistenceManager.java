@@ -8,6 +8,11 @@ package com.example;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
+
+/**
+ *
+ * @author 57300
+ */
 public class PersistenceManager {
 
     public static final boolean DEBUG = true;
@@ -39,7 +44,7 @@ public class PersistenceManager {
     }
 
     protected void createEntityManagerFactory() {
-        this.emf = Persistence.createEntityManagerFactory("CompetitorsPU",
+        this.emf = Persistence.createEntityManagerFactory("PersistenceUnit_LabJPA",
                 System.getProperties());
         if (DEBUG) {
             System.out.println("Persistence started at " + new java.util.Date());

@@ -3,52 +3,118 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.example.models;
+
+import com.sun.istack.NotNull;
+import java.io.Serializable;
+import java.util.Calendar;
+import java.util.Set;
+import static javax.persistence.CascadeType.ALL;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+//import static org.eclipse.persistence.expressions.ExpressionOperator.NotNull;
 
 /**
  *
  * @author Mauricio
  */
-public class Competitor{
-     
-    
+@Entity
+public class Competitor implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
+    @NotNull
+    @Column(name = "create_at", updatable = false)
+    @Temporal(TemporalType.DATE)
+    private Calendar createdAt;
+    @NotNull
+    @Column(name = "updated_at")
+    @Temporal(TemporalType.DATE)
+    private Calendar updatedAt;
+
     private String name;
-    
+
     private String surname;
-    
+
     private int age;
-    
+
     private String telephone;
-    
+
     private String cellphone;
-    
+
     private String address;
-    
+
     private String city;
-    
+
     private String country;
-    
+
     private boolean winner;
 
-    
-    public Competitor(){
-        
+    @OneToMany(cascade = ALL, mappedBy = "competitor")
+    private Set<Producto> products;
+
+    public Competitor() {
+
     }
-    
-    public Competitor(String nameN, String surnameN, int ageN,String telephoneN, String cellphoneN, String addressN, String  cityN, String countryN,boolean winnerN){
-        name=nameN;
-        surname=surnameN;
-        age=ageN;
-        telephone=telephoneN;
-        cellphone=cellphoneN;
-        address=addressN;
-        city=cityN;
-        country=countryN;
-        winner=winnerN;
+
+    public Long getId() {
+        return id;
     }
-    
-   
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Calendar getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Calendar createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Calendar getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Calendar updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public Competitor(String nameN, String surnameN, int ageN, String telephoneN, String cellphoneN, String addressN, String cityN, String countryN, boolean winnerN) {
+        name = nameN;
+        surname = surnameN;
+        age = ageN;
+        telephone = telephoneN;
+        cellphone = cellphoneN;
+        address = addressN;
+        city = cityN;
+        country = countryN;
+        winner = winnerN;
+    }
+
+    @PreUpdate
+    private void updateTimestamp() {
+        this.updatedAt = Calendar.getInstance();
+    }
+
+    @PrePersist
+    private void creationTimestamp() {
+        this.createdAt = this.updatedAt = Calendar.getInstance();
+    }
+
     public String getName() {
         return name;
     }
@@ -120,5 +186,8 @@ public class Competitor{
     public void setWinner(boolean winner) {
         this.winner = winner;
     }
-    
+
+    public Set<Producto> getProducts() {
+        return products;
+    }
 }
